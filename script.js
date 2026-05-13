@@ -5,6 +5,8 @@ const SPREADSHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxvnESpg2Im
 
 const form = document.querySelector('#hours-form');
 const hoursInput = document.querySelector('#hours-input');
+const descriptionInput = document.querySelector('#description-input');
+const jiraInput = document.querySelector('#jira-input');
 const workedHours = document.querySelector('#worked-hours');
 const earnedValue = document.querySelector('#earned-value');
 const remainingHours = document.querySelector('#remaining-hours');
@@ -41,7 +43,9 @@ function normalizeEntry(entry) {
   return {
     id: entry.id || createEntryId(),
     hours: Number(entry.hours),
-    date: entry.date || ''
+    date: entry.date || '',
+    description: entry.description || '',
+    jiraLink: entry.jiraLink || ''
   };
 }
 
@@ -291,11 +295,14 @@ function renderHistory() {
     const entryInfo = document.createElement('div');
     const date = document.createElement('span');
     const value = document.createElement('strong');
+    const description = document.createElement('span');
     const removeButton = document.createElement('button');
 
     entryInfo.className = 'history-entry';
     date.textContent = entry.date;
     value.textContent = `${formatHours(entry.hours)} - ${formatCurrency(entry.hours * HOUR_VALUE)}`;
+    description.className = 'history-description';
+    description.textContent = entry.description || 'Sem descricao.';
     removeButton.className = 'remove-entry';
     removeButton.type = 'button';
     removeButton.textContent = 'Remover';
@@ -304,7 +311,18 @@ function renderHistory() {
       removeEntry(originalEntry);
     });
 
-    entryInfo.append(date, value);
+    entryInfo.append(date, value, description);
+
+    if (entry.jiraLink) {
+      const jiraLink = document.createElement('a');
+      jiraLink.className = 'history-link';
+      jiraLink.href = entry.jiraLink;
+      jiraLink.target = '_blank';
+      jiraLink.rel = 'noopener noreferrer';
+      jiraLink.textContent = 'Abrir task do Jira';
+      entryInfo.appendChild(jiraLink);
+    }
+
     item.append(entryInfo, removeButton);
     historyList.appendChild(item);
   });
@@ -343,10 +361,18 @@ form.addEventListener('submit', async (event) => {
   }
 
   const hours = parseHours(hoursInput.value);
+  const description = descriptionInput.value.trim();
+  const jiraLink = jiraInput.value.trim();
 
   if (!Number.isFinite(hours) || hours <= 0) {
     inputError.textContent = 'Digite um valor como 1h 35m, 1:35, 95m ou 1,5.';
     hoursInput.focus();
+    return;
+  }
+
+  if (!description) {
+    inputError.textContent = 'Digite uma descricao para o lancamento.';
+    descriptionInput.focus();
     return;
   }
 
@@ -355,6 +381,8 @@ form.addEventListener('submit', async (event) => {
   const entry = {
     id: createEntryId(),
     hours,
+    description,
+    jiraLink,
     date: new Date().toLocaleString('pt-BR', {
       day: '2-digit',
       month: '2-digit',
