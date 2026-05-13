@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contador de Horas</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app">
+    <section class="summary" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Meta mensal</p>
+        <h1 id="page-title">Contador de horas e valores</h1>
+        <p class="subtitle">Cada hora vale R$ 60,00. A meta e fechar 176 horas no mes.</p>
+      </div>
+
+      <div class="goal-card">
+        <span class="goal-label">Meta total</span>
+        <strong>176h</strong>
+        <span>R$ 10.560,00</span>
+      </div>
+    </section>
+
+    <section class="panel input-panel" aria-labelledby="add-title">
+      <div>
+        <h2 id="add-title">Adicionar horas</h2>
+        <p>Digite quantas horas voce fez e registre no contador.</p>
+      </div>
+
+      <form id="hours-form" class="hours-form">
+        <label for="hours-input">Horas trabalhadas</label>
+        <div class="input-row">
+          <input id="hours-input" type="text" placeholder="Ex: 1h 35m" required>
+          <button type="submit">Adicionar</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="stats-grid" aria-label="Resumo do mes">
+      <article class="stat-card">
+        <span>Horas feitas</span>
+        <strong id="worked-hours">0h</strong>
+      </article>
+
+      <article class="stat-card">
+        <span>Valor feito</span>
+        <strong id="earned-value">R$ 0,00</strong>
+      </article>
+
+      <article class="stat-card">
+        <span>Faltam horas</span>
+        <strong id="remaining-hours">176h</strong>
+      </article>
+
+      <article class="stat-card">
+        <span>Falta em valor</span>
+        <strong id="remaining-value">R$ 10.560,00</strong>
+      </article>
+    </section>
+
+    <section class="panel progress-panel" aria-labelledby="progress-title">
+      <div class="progress-header">
+        <div>
+          <h2 id="progress-title">Progresso</h2>
+          <p id="status-message">Voce ainda nao adicionou horas.</p>
+        </div>
+        <strong id="progress-percent">0%</strong>
+      </div>
+      <div class="progress-track" aria-hidden="true">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+    </section>
+
+    <section class="panel history-panel" aria-labelledby="history-title">
+      <div class="history-header">
+        <div>
+          <h2 id="history-title">Lancamentos</h2>
+          <p id="storage-status">Seu progresso fica salvo neste navegador.</p>
+        </div>
+        <button id="clear-button" class="secondary-button" type="button">Zerar</button>
+      </div>
+
+      <p id="sync-status" class="sync-status" aria-live="polite"></p>
+      <ul id="history-list" class="history-list"></ul>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
