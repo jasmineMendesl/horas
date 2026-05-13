@@ -283,29 +283,36 @@ function renderHistory() {
   historyList.innerHTML = '';
 
   if (entries.length === 0) {
-    const emptyItem = document.createElement('li');
+    const emptyItem = document.createElement('tr');
+    const emptyCell = document.createElement('td');
+
+    emptyCell.colSpan = 6;
     emptyItem.className = 'empty-history';
-    emptyItem.textContent = 'Nenhuma hora adicionada ainda.';
+    emptyCell.textContent = 'Nenhuma hora adicionada ainda.';
+    emptyItem.appendChild(emptyCell);
     historyList.appendChild(emptyItem);
     return;
   }
 
   entries.slice().reverse().forEach((entry, index) => {
-    const item = document.createElement('li');
+    const row = document.createElement('tr');
     const originalIndex = entries.length - 1 - index;
     const originalEntry = entries[originalIndex];
-    const entryInfo = document.createElement('div');
-    const date = document.createElement('span');
-    const value = document.createElement('strong');
-    const person = document.createElement('span');
+    const dateCell = document.createElement('td');
+    const personCell = document.createElement('td');
+    const hoursCell = document.createElement('td');
+    const valueCell = document.createElement('td');
+    const detailsCell = document.createElement('td');
+    const actionCell = document.createElement('td');
+    const details = document.createElement('div');
     const description = document.createElement('span');
     const removeButton = document.createElement('button');
 
-    entryInfo.className = 'history-entry';
-    date.textContent = entry.date;
-    value.textContent = `${formatHours(entry.hours)} - ${formatCurrency(entry.hours * HOUR_VALUE)}`;
-    person.className = 'history-person';
-    person.textContent = entry.person || 'Sem pessoa informada';
+    dateCell.textContent = entry.date;
+    personCell.textContent = entry.person || '-';
+    hoursCell.textContent = formatHours(entry.hours);
+    valueCell.textContent = formatCurrency(entry.hours * HOUR_VALUE);
+    details.className = 'history-details';
     description.className = 'history-description';
     description.textContent = entry.description || 'Sem descricao.';
     removeButton.className = 'remove-entry';
@@ -316,7 +323,7 @@ function renderHistory() {
       removeEntry(originalEntry);
     });
 
-    entryInfo.append(date, value, person, description);
+    details.appendChild(description);
 
     if (entry.jiraLink) {
       const jiraLink = document.createElement('a');
@@ -325,11 +332,13 @@ function renderHistory() {
       jiraLink.target = '_blank';
       jiraLink.rel = 'noopener noreferrer';
       jiraLink.textContent = 'Abrir task do Jira';
-      entryInfo.appendChild(jiraLink);
+      details.appendChild(jiraLink);
     }
 
-    item.append(entryInfo, removeButton);
-    historyList.appendChild(item);
+    detailsCell.appendChild(details);
+    actionCell.appendChild(removeButton);
+    row.append(dateCell, personCell, hoursCell, valueCell, detailsCell, actionCell);
+    historyList.appendChild(row);
   });
 }
 
