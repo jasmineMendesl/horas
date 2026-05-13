@@ -4,6 +4,7 @@ const STORAGE_KEY = 'hourCounterEntries';
 const SPREADSHEET_API_URL = 'https://script.google.com/macros/s/AKfycbxvnESpg2ImihYg3TNDM03vYmcGQV50tNqeK9FHJ297KYlCXNMc_pYgl7dh_eGzM-Mp/exec';
 
 const form = document.querySelector('#hours-form');
+const personInput = document.querySelector('#person-input');
 const hoursInput = document.querySelector('#hours-input');
 const descriptionInput = document.querySelector('#description-input');
 const jiraInput = document.querySelector('#jira-input');
@@ -44,6 +45,7 @@ function normalizeEntry(entry) {
     id: entry.id || createEntryId(),
     hours: Number(entry.hours),
     date: entry.date || '',
+    person: entry.person || '',
     description: entry.description || '',
     jiraLink: entry.jiraLink || ''
   };
@@ -295,12 +297,15 @@ function renderHistory() {
     const entryInfo = document.createElement('div');
     const date = document.createElement('span');
     const value = document.createElement('strong');
+    const person = document.createElement('span');
     const description = document.createElement('span');
     const removeButton = document.createElement('button');
 
     entryInfo.className = 'history-entry';
     date.textContent = entry.date;
     value.textContent = `${formatHours(entry.hours)} - ${formatCurrency(entry.hours * HOUR_VALUE)}`;
+    person.className = 'history-person';
+    person.textContent = entry.person || 'Sem pessoa informada';
     description.className = 'history-description';
     description.textContent = entry.description || 'Sem descricao.';
     removeButton.className = 'remove-entry';
@@ -311,7 +316,7 @@ function renderHistory() {
       removeEntry(originalEntry);
     });
 
-    entryInfo.append(date, value, description);
+    entryInfo.append(date, value, person, description);
 
     if (entry.jiraLink) {
       const jiraLink = document.createElement('a');
@@ -361,8 +366,15 @@ form.addEventListener('submit', async (event) => {
   }
 
   const hours = parseHours(hoursInput.value);
+  const person = personInput.value;
   const description = descriptionInput.value.trim();
   const jiraLink = jiraInput.value.trim();
+
+  if (!person) {
+    inputError.textContent = 'Selecione Jasmine ou Pedro.';
+    personInput.focus();
+    return;
+  }
 
   if (!Number.isFinite(hours) || hours <= 0) {
     inputError.textContent = 'Digite um valor como 1h 35m, 1:35, 95m ou 1,5.';
@@ -381,6 +393,7 @@ form.addEventListener('submit', async (event) => {
   const entry = {
     id: createEntryId(),
     hours,
+    person,
     description,
     jiraLink,
     date: new Date().toLocaleString('pt-BR', {

@@ -27,7 +27,8 @@ body {
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
@@ -114,9 +115,11 @@ h2 {
 
 .input-panel {
   display: grid;
-  grid-template-columns: 1fr minmax(320px, 520px);
-  gap: 24px;
-  align-items: end;
+  gap: 18px;
+}
+
+.input-heading {
+  max-width: 680px;
 }
 
 .hours-form label {
@@ -129,8 +132,8 @@ h2 {
 
 .form-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
 }
 
 .form-field {
@@ -138,7 +141,8 @@ h2 {
   gap: 8px;
 }
 
-input {
+input,
+select {
   width: 100%;
   min-height: 48px;
   border: 1px solid var(--line);
@@ -148,9 +152,18 @@ input {
   background: var(--panel-soft);
 }
 
-input:focus {
+input:focus,
+select:focus {
   border-color: var(--primary);
   outline: 3px solid rgba(155, 111, 199, 0.18);
+}
+
+.form-field-wide {
+  grid-column: 1 / -1;
+}
+
+.form-grid button {
+  align-self: end;
 }
 
 .input-error {
@@ -269,6 +282,12 @@ button:hover {
   color: var(--text);
 }
 
+.history-person {
+  color: var(--primary-dark);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .history-link {
   color: var(--primary-dark);
   font-size: 0.9rem;
@@ -301,6 +320,10 @@ button:hover {
 @media (max-width: 800px) {
   .summary,
   .input-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .form-grid {
     grid-template-columns: 1fr;
   }
 

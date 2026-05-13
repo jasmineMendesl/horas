@@ -23,7 +23,7 @@
     </section>
 
     <section class="panel input-panel" aria-labelledby="add-title">
-      <div>
+      <div class="input-heading">
         <h2 id="add-title">Adicionar horas</h2>
         <p>Digite quantas horas voce fez e registre no contador.</p>
       </div>
@@ -31,16 +31,25 @@
       <form id="hours-form" class="hours-form">
         <div class="form-grid">
           <div class="form-field">
+            <label for="person-input">Pessoa</label>
+            <select id="person-input" required>
+              <option value="">Selecione</option>
+              <option value="Jasmine">Jasmine</option>
+              <option value="Pedro">Pedro</option>
+            </select>
+          </div>
+
+          <div class="form-field">
             <label for="hours-input">Horas trabalhadas</label>
             <input id="hours-input" type="text" placeholder="Ex: 1h 35m" required>
           </div>
 
-          <div class="form-field">
+          <div class="form-field form-field-wide">
             <label for="description-input">Descricao</label>
             <input id="description-input" type="text" placeholder="Ex: Ajustes na tela de login" required>
           </div>
 
-          <div class="form-field">
+          <div class="form-field form-field-wide">
             <label for="jira-input">Link da task do Jira</label>
             <input id="jira-input" type="url" placeholder="https://empresa.atlassian.net/browse/TASK-123">
           </div>
